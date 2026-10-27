@@ -276,3 +276,42 @@ footer {
     padding: 22px;
   }
 }
+
+.ocr-panel {
+  margin: 18px 0;
+  padding: 18px;
+  border: 1px solid #25404d;
+  border-radius: 18px;
+  background: #10212e;
+}
+
+.ocr-panel h3 {
+  color: #55f5dc;
+  margin-bottom: 8px;
+}
+
+.ocr-panel p {
+  color: #a4b8c5;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ocr-panel button {
+  width: 100%;
+  margin: 6px 0;
+}
+
+.ocr-result {
+  min-height: 100px;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 12px 0;
+  padding: 14px;
+  border-radius: 12px;
+  background: #071018;
+  color: #f1f7fa;
+  font-size: 15px;
+  line-height: 1.7;
+}

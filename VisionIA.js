@@ -111,6 +111,7 @@ async function startCamera() {
     stopBtn.disabled = false;
     speakBtn.disabled = false;
     captureBtn.disabled = false;
+    ocrBtn.disabled = false;
 
     statusText.textContent = "Cámara activa";
     message.textContent = "Analizando lo que ve la cámara...";
@@ -270,7 +271,12 @@ function stopCamera() {
   stopBtn.disabled = true;
   speakBtn.disabled = true;
   captureBtn.disabled = true;
-  startBtn.disabled = !model;
+  startBtn.disabled = !model;   
+  ocrBtn.disabled = true;
+readTextBtn.disabled = true;
+recognizedText = "";
+ocrResult.textContent = "El texto reconocido aparecerá aquí.";
+ocrStatus.textContent = "Cámara detenida.";
 
   statusText.textContent = model ? "IA preparada" : "Cargando IA";
   message.textContent = "Cámara detenida.";
@@ -295,3 +301,99 @@ captureBtn.addEventListener("click", captureImage);
 // Iniciar la carga de la inteligencia artificial.
 startBtn.disabled = true;
 loadAI();
+
+const ocrBtn = document.getElementById("ocrBtn");
+const ocrStatus = document.getElementById("ocrStatus");
+const ocrResult = document.getElementById("ocrResult");
+const readTextBtn = document.getElementById("readTextBtn");
+
+let recognizedText = "";
+let ocrBusy = false;
+
+async function readCameraText() {
+  if (ocrBusy || !stream || video.readyState < 2) {
+    ocrStatus.textContent =
+      "Primero activa la cámara y espera a que aparezca la imagen.";
+    return;
+  }
+
+  if (!window.Tesseract) {
+    ocrStatus.textContent =
+      "No se cargó Tesseract. Revisa tu conexión y recarga.";
+    return;
+  }
+
+  ocrBusy = true;
+  ocrBtn.disabled = true;
+  readTextBtn.disabled = true;
+  ocrStatus.textContent =
+    "Preparando el lector de texto en español...";
+  ocrResult.textContent = "";
+
+  let worker;
+
+  try {
+    // Capturar un fotograma de la cámara.
+    const snapshot = document.createElement("canvas");
+    snapshot.width = video.videoWidth;
+    snapshot.height = video.videoHeight;
+
+    const snapshotCtx = snapshot.getContext("2d");
+    snapshotCtx.drawImage(
+      video, 0, 0, snapshot.width, snapshot.height
+    );
+
+    // Cargar el OCR en español y analizar la captura.
+    worker = await Tesseract.createWorker("spa");
+
+    ocrStatus.textContent = "Leyendo el texto de la imagen...";
+
+    const result = await worker.recognize(snapshot);
+    recognizedText = result.data.text.trim();
+
+    if (!recognizedText) {
+      ocrResult.textContent =
+        "No se encontró texto. Acerca la cámara, mejora la luz e inténtalo otra vez.";
+      ocrStatus.textContent = "No se reconoció texto.";
+      return;
+    }
+
+    ocrResult.textContent = recognizedText;
+    ocrStatus.textContent = "Lectura completada.";
+    readTextBtn.disabled = false;
+  } catch (error) {
+    console.error("Error OCR:", error);
+    ocrStatus.textContent =
+      "No se pudo leer el texto. Comprueba tu conexión e inténtalo otra vez.";
+  } finally {
+    if (worker) {
+      await worker.terminate();
+    }
+
+    ocrBusy = false;
+    ocrBtn.disabled = !running;
+  }
+}
+
+function speakRecognizedText() {
+  if (!recognizedText) return;
+
+  if (!("speechSynthesis" in window)) {
+    ocrStatus.textContent =
+      "Este navegador no dispone de lectura por voz.";
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const utterance =
+    new SpeechSynthesisUtterance(recognizedText);
+
+  utterance.lang = "es-ES";
+  utterance.rate = 0.9;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+ocrBtn.addEventListener("click", readCameraText);
+readTextBtn.addEventListener("click", speakRecognizedText);

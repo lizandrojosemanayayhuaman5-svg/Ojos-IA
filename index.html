@@ -66,14 +66,37 @@
         <p class="empty">Todavía no hay objetos detectados.</p>
       </div>
 
-      <div class="actions extra-actions">
-        <button id="speakBtn" class="secondary" disabled>
-          🔊 Escuchar
-        </button>
-        <button id="captureBtn" class="secondary" disabled>
-          ◉ Guardar imagen
-        </button>
-      </div>
+      
+<div class="actions extra-actions">
+  <button id="speakBtn" class="secondary" disabled>
+    🔊 Escuchar objetos
+  </button>
+  <button id="captureBtn" class="secondary" disabled>
+    ◉ Guardar imagen
+  </button>
+</div>
+
+<section class="ocr-panel">
+  <h3>Leer texto con la cámara</h3>
+  <p>Enfoca un libro, cartel o etiqueta y captura una imagen.</p>
+
+  <button id="ocrBtn" class="primary" disabled>
+    📖 Leer texto
+  </button>
+
+  <p id="ocrStatus" aria-live="polite">
+    Esperando a que la IA esté lista...
+  </p>
+
+  <div id="ocrResult" class="ocr-result">
+    El texto reconocido aparecerá aquí.
+  </div>
+
+  <button id="readTextBtn" class="secondary" disabled>
+    🔊 Leer texto en voz alta
+  </button>
+</section>
+
     </section>
 
     <section class="privacy">
@@ -88,6 +111,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="VisionIA.js"></script>
 </body>
 </html>
