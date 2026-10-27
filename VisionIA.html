@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08121d">
+  <title>OJOS IA | Visión inteligente</title>
+  <link rel="stylesheet" href="Visual_IA.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-icon">◉</div>
+    <div>
+      <h1>OJOS <span>IA</span></h1>
+      <p>Tu entorno, explicado por inteligencia artificial</p>
+    </div>
+    <span class="live">● IA</span>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p class="eyebrow">PROYECTO DE VISIÓN ARTIFICIAL</p>
+      <h2>Mira el mundo<br><span>de otra manera.</span></h2>
+      <p>Apunta la cámara y descubre los objetos
+         que la inteligencia artificial puede reconocer.</p>
+    </section>
+
+    <section class="camera-card">
+      <div class="camera-heading">
+        <span>ESCÁNER VISUAL</span>
+        <span id="status">Preparando sistema...</span>
+      </div>
+
+      <div class="camera-area" id="cameraArea">
+        <video id="video" autoplay muted playsinline></video>
+        <canvas id="overlay"></canvas>
+        <div id="placeholder" class="placeholder">
+          <div class="camera-symbol">◎</div>
+          <p>Tu cámara aparecerá aquí</p>
+          <small>Activa la cámara para comenzar</small>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="startBtn" class="primary">
+          Activar cámara
+        </button>
+        <button id="stopBtn" class="secondary" disabled>
+          Detener
+        </button>
+      </div>
+
+      <p id="message" class="message" aria-live="polite">
+        Cargando el modelo de inteligencia artificial...
+      </p>
+    </section>
+
+    <section class="results">
+      <div class="section-title">
+        <h3>Lo que estoy viendo</h3>
+        <span id="objectCount">0 objetos</span>
+      </div>
+
+      <div id="resultsList" class="results-list">
+        <p class="empty">Todavía no hay objetos detectados.</p>
+      </div>
+
+      <div class="actions extra-actions">
+        <button id="speakBtn" class="secondary" disabled>
+          🔊 Escuchar
+        </button>
+        <button id="captureBtn" class="secondary" disabled>
+          ◉ Guardar imagen
+        </button>
+      </div>
+    </section>
+
+    <section class="privacy">
+      <strong>Tu privacidad importa</strong>
+      <p>La detección se ejecuta en el navegador.
+         Esta versión no envía imágenes a un servidor
+         ni guarda fotografías automáticamente.</p>
+    </section>
+  </main>
+
+  <footer>OJOS IA · Tecnología con propósito</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="VisionIA.js"></script>
+</body>
+</html>
